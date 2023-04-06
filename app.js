@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 
 const express = require('express');
 const path = require('path')
-
+const errorController = require('./controllers/error')
 
 const app = express(); // since it returns function we call it like this
 
@@ -22,12 +22,7 @@ app.use(express.static(path.join(__dirname,'public')))
 app.use('/admin/',adminRoutes); 
 app.use(shopRoutes)
 
-app.use((req,res,next)=> {
-    res
-        .status(404)
-        // .sendFile(path.join(__dirname,'views','page-not-found.html'))
-        .render('page-not-found',{pageTitle: 'Page not Found'})
-})
+app.use(errorController.get404)
 
 // const server = http.createServer(app);
 // server.listen(3000)
