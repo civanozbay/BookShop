@@ -15,15 +15,16 @@ exports.postAddProduct = (req,res,next)=>{
 }
 
 exports.getProducts = (req,res,next) => {
-    const products = Product.fetchAll();
     // we can send response as a html,json,object 
-    // it set the header automatically. You can also set with setheader() as well.
     // res.send('<h1>Helloo from express</h1>');
-
+    // it set the header automatically. You can also set with setheader() as well.
+    
     // since we implement pug as a template engine we don't need to send html no more.
     // res.sendFile(path.join(__dirname,'../','views','shop.html'));
-    res.render('shop',
-    {prods:products,
-    pageTitle : 'Shop',
-    path:'/shop'}); 
+    Product.fetchAll(products => {
+        res.render('shop',
+        {prods:products,
+        pageTitle : 'Shop',
+        path:'/shop'}); 
+    });
 }
