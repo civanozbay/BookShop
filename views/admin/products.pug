@@ -10,16 +10,7 @@ block content
                     article.card.product-item
                         header.card__header
                             h1.product__title #{product.title}                       
-                        
-                        //- div.card__image
-                        //-     //- -var attributes = {}
-                        //-     //- -attributes.src = '#{product.imageUrl}'
-                        //-     //- -attributes.alt = '#{product.title}'
-                        //-     //- img&attributes(attributes)
-                        //-     mixin card(src,alt)
-                        //-         -var attributes =({src,alt})
-                        //-         img&attributes(attributes)
-                        //-     +card('#{product.imageUrl}','#{product.title}')
+
                         mixin card(src, alt)
                             img(src=src, alt=alt)
 
@@ -27,14 +18,14 @@ block content
                             +card(product.imageUrl, product.title)
 
                         
-                        
                         div.card__content
                             h2.product__price $#{product.price}
                             p.product__description #{product.description}
                         
                         div.card__actions
-                            a.button.btn(href="/admin/edit-product") Edit
-                            form(action="/admin/delete-product",method="POST")
+                            a.button.btn(href=`/admin/edit-product/${product.id}?edit=true`) Edit
+                            form(action=`/admin/delete-product`,method="POST")
+                                input(type="hidden",value=`${product.id}`,name="productId")
                                 button.btn(type="submit") Delete
         else 
             h1 No Products
