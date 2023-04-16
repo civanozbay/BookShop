@@ -6,7 +6,7 @@ block content
     main.centered
         h1 #{prod.title}
         hr
-        div
+        div.image
             mixin card(src, alt)
                 img(src=src, alt=alt)
             +card(prod.imageUrl, prod.title)

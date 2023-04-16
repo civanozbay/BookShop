@@ -1,41 +1,63 @@
 const Product = require('../models/product')
 const Cart = require('../models/cart')
 exports.getProducts = (req,res,next) => {
-    // we can send response as a html,json,object 
-    // res.send('<h1>Helloo from express</h1>');
-    // it set the header automatically. You can also set with setheader() as well.
+    Product.findAll()
+        .then(products=> {
+            res.render('shop/product-list',
+            {prods:products,
+            pageTitle : 'All products',
+            path:'/products'}); 
+    })
+        .catch(err=>console.log(err));
     
-    // since we implement pug as a template engine we don't need to send html no more.
-    // res.sendFile(path.join(__dirname,'../','views','shop.html'));
-    Product.fetchAll(products => {
-        res.render('shop/product-list',
-        {prods:products,
-        pageTitle : 'All products',
-        path:'/products'}); 
-    });
+    // Product.fetchAll()
+    // .then(([rows,fieldData])=>{
+    //     res.render('shop/product-list',
+    //     {prods:rows,
+    //     pageTitle : 'All products',
+    //     path:'/products'}); 
+    // })
+    // .catch(err => console.log(err));
 }
 
 exports.getProduct = (req,res,next) => {
     const prodId = req.params.productId
-    console.log(prodId);
-    Product.findById(prodId,product=> {
-        res.render('shop/product-detail',{
-            prod:product,
-            pageTitle : product.title,
-            path: '/products'
-        })
-    })
-}
+    // another approach
+    // Product.findAll({where:{id:prodId}})
+    // .then(products => {})
+    // .catch(err => console.log(err))
 
+    Product.findByPk(prodId)
+        .then(product=>{
+            res.render('shop/product-detail',{
+                prod:product,
+                pageTitle : product.title,
+                path: '/products'
+            })
+        })
+        .catch(err => console.log(err));
+}
 
 exports.getIndex = (req,res,next) =>{
-    Product.fetchAll(products => {
-        res.render('shop/index',
-        {prods:products,
-        pageTitle : 'Shop',
-        path:'/'}); 
-    });
-}
+    Product.findAll()
+        .then(products=> {
+        res.render('shop/index',{
+            prods:products,
+            pageTitle:'Shop',
+            path:'/'
+        })
+    })
+        .catch(err=>console.log(err));
+    // Product.fetchAll()
+    //     .then(([rows,fieldData])=>{
+    //         res.render('shop/index',{
+    //             prods:rows,
+    //             pageTitle:'Shop',
+    //             path:'/'
+    //         })
+    //     })
+    //     .catch(err => console.log(err));
+    }
 
 exports.getCart = (req,res,next) => {
     Cart.getCart(cart => {
