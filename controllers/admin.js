@@ -13,7 +13,7 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  Product.create({
+  req.user.createProduct({  // this method coming from sequalize since we bond them with hasMany method in app.js file,it directly create a product with userId   
     title : title,
     imageUrl : imageUrl,
     price : price,
@@ -61,7 +61,8 @@ exports.postDeleteProduct = (req,res,next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  req.user
+    .getProducts()
     .then(product => {
       res.render('admin/products', {
         prods: product,
@@ -78,6 +79,7 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/')
   }
   const prodId = req.params.productId;
+  
   Product.findByPk(prodId)
     .then(product =>{
       if(!product){
